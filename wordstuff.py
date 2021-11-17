@@ -3,7 +3,6 @@ import re
 import operator
 from collections import Counter
 
-
 csvSave = 'csv/'
 
 
@@ -22,7 +21,8 @@ def vokal_consonant_by_length_rel(words):
     longestWordLen = len(max(words, key=len))
     len_dict = {}
     for x in range(1, longestWordLen):
-        len_dict[x] = [[get_relationship(word)[0], get_relationship(word)[3]] for word in words if len(word) == x]
+        len_dict[x] = [[get_relationship(word)[0], get_relationship(word)[3]]
+                       for word in words if len(word) == x]
     stats = {}
     for k, v in len_dict.items():
         stats[k] = sum([word[1] for word in v])/len(v)
@@ -90,7 +90,9 @@ def entropy_of_words_based_on_lengths(words):
     with open(f'{csvSave}entropyFile.csv', 'w') as entropyFile:
         entropyFile.write('Length;entropy\n')
         for key, value in entropy_words.items():
-            entropyFile.write('{length};{entropy}\n'.format(length=key, entropy=str(value).replace('.', ',')))
+            entropyFile.write('{length};{entropy}\n'
+                              .format(length=key, entropy=str(value)
+                                      .replace('.', ',')))
 
 
 def use_of_letters(words):
@@ -104,7 +106,8 @@ def use_of_letters(words):
     with open(f'{csvSave}letterDist.csv', 'w') as letterDistFile:
         letterDistFile.write('letter,count\n')
         for key, value in use_of_letters.items():
-            letterDistFile.write('{key},{value}\n'.format(key=key, value=value))
+            letterDistFile.write('{key},{value}\n'
+                                 .format(key=key, value=value))
 
 
 def distribution(words):  # Distributionen af æøå ord i ordlisten
@@ -158,7 +161,8 @@ def len_statistics(words):  # Distributionen af ordlængder
     with open(f'{csvSave}length.csv', 'w') as lengthFile:
         lengthFile.write('length,amount\n')
         for key, value in lenStats.items():
-            lengthFile.write('{length},{amount}\n'.format(length=key, amount=value))
+            lengthFile.write('{length},{amount}\n'
+                             .format(length=key, amount=value))
 
 
 def get_words():
