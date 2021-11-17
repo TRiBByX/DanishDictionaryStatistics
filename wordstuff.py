@@ -6,15 +6,16 @@ from collections import Counter
 
 csvSave = 'csv/'
 
+
 def main():
     words = get_words()
     # len_statistics(words)
-    # distribution(words)
+    distribution(words)
     # use_of_letters(words)
     # entropy_of_words_based_on_lengths(words)
     # compound_Words(words)
     # vokals_consonant_relationship(words)
-    vokal_consonant_by_length_rel(words)
+    # vokal_consonant_by_length_rel(words)
 
 
 def vokal_consonant_by_length_rel(words):
