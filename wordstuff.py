@@ -1,7 +1,9 @@
 import math
 import re
 import operator
+import pandas as pd
 from collections import Counter
+from scipy import stats as sstats
 
 csvSave = 'csv/'
 
@@ -9,9 +11,9 @@ csvSave = 'csv/'
 def main():
     words = get_words()
     # len_statistics(words)
-    distribution(words)
+    # distribution(words)
     # use_of_letters(words)
-    # entropy_of_words_based_on_lengths(words)
+    entropy_of_words_based_on_lengths(words)
     # compound_Words(words)
     # vokals_consonant_relationship(words)
     # vokal_consonant_by_length_rel(words)
@@ -67,11 +69,16 @@ def vokals_consonant_relationship(words):
 def compound_Words(words):
     # roots = []
     # compounds = []
-    regex = '([\w-]*{word}[\w-]*)'
+    # regex = '([\w-]*{word}[\w-]*)'
+    # for xword in words:
+    #     r = re.compile(regex.format(word=xword))
+    #     compounds = list(filter(r.match, words))
+    compounds = []
     for xword in words:
-        r = re.compile(regex.format(word=xword))
-        compounds = list(filter(r.match, words))
-
+        for yword in words:
+            if xword in yword:
+                compounds.append([xword, yword])
+    compounds = list(set(compounds))
     print(compounds)
 
 
@@ -111,6 +118,7 @@ def use_of_letters(words):
 
 def distribution(words):  # Distributionen af æøå ord i ordlisten
     dist = {}
+    # TODO: Make it less switch like and maybe more scalable.
     dist['æ'] = [word for word in words
                  if 'æ' in word and
                  'ø' not in word and
@@ -170,8 +178,11 @@ def get_words():
 
 
 def entropy(s):
-    p, lns = Counter(s), float(len(s))
-    return -sum(count/lns * math.log(count/lns, 2) for count in p.values())
+    # Shannon algortithm
+    series = pd.Series([letter for letter in s])
+    counts = series.value_counts()
+    entropy = sstats.entropy(counts)
+    return entropy
 
 
 if __name__ == "__main__":
