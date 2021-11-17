@@ -106,8 +106,7 @@ def use_of_letters(words):
     with open(f'{csvSave}letterDist.csv', 'w') as letterDistFile:
         letterDistFile.write('letter,count\n')
         for key, value in use_of_letters.items():
-            letterDistFile.write('{key},{value}\n'
-                                 .format(key=key, value=value))
+            letterDistFile.write(f'{key},{value}\n')
 
 
 def distribution(words):  # Distributionen af æøå ord i ordlisten
@@ -148,8 +147,7 @@ def distribution(words):  # Distributionen af æøå ord i ordlisten
     with open(f'{csvSave}charDist.csv', 'w') as charDistFile:
         charDistFile.write('letter,count\n')
         for key, value in dist.items():
-            charDistFile.write('{key},{value}\n'.format(key=key,
-                                                        value=len(value)))
+            charDistFile.write(f'{key},{value}\n')
 
 
 def len_statistics(words):  # Distributionen af ordlængder
@@ -161,8 +159,7 @@ def len_statistics(words):  # Distributionen af ordlængder
     with open(f'{csvSave}length.csv', 'w') as lengthFile:
         lengthFile.write('length,amount\n')
         for key, value in lenStats.items():
-            lengthFile.write('{length},{amount}\n'
-                             .format(length=key, amount=value))
+            lengthFile.write(f'{key},{value}\n')
 
 
 def get_words():
