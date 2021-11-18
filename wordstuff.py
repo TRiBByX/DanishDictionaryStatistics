@@ -1,8 +1,5 @@
-import math
-import re
 import operator
 import pandas as pd
-from collections import Counter
 from scipy import stats as sstats
 
 csvSave = 'csv/'
@@ -11,9 +8,9 @@ csvSave = 'csv/'
 def main():
     words = get_words()
     # len_statistics(words)
-    # distribution(words)
+    distribution(words)
     # use_of_letters(words)
-    entropy_of_words_based_on_lengths(words)
+    # entropy_of_words_based_on_lengths(words)
     # compound_Words(words)
     # vokals_consonant_relationship(words)
     # vokal_consonant_by_length_rel(words)
@@ -63,7 +60,8 @@ def vokals_consonant_relationship(words):
     sorted_list = sorted(rich_words, key=operator.itemgetter(3))
     top10 = sorted_list[-10:]
     for w in top10:
-        print(f'Word: {w[0]}, Consonants: {w[1]}, Vocals: {w[2]}, Ratio: {w[3]}')
+        print(f'Word: {w[0]}, Consonants: {w[1]}, \
+                Vocals: {w[2]}, Ratio: {w[3]}')
 
 
 def compound_Words(words):
@@ -118,40 +116,32 @@ def use_of_letters(words):
 
 def distribution(words):  # Distributionen af æøå ord i ordlisten
     dist = {}
+    letters = ['æ', 'ø', 'å']
+    combos = [['æ', 'ø', 'å'], ['æ', 'å', 'ø'], ['å', 'ø', 'æ']]
     # TODO: Make it less switch like and maybe more scalable.
-    dist['æ'] = [word for word in words
-                 if 'æ' in word and
-                 'ø' not in word and
-                 'å' not in word]
-    dist['ø'] = [word for word in words
-                 if 'ø' in word and
-                 'æ' not in word and
-                 'å' not in word]
-    dist['å'] = [word for word in words
-                 if 'å' in word and
-                 'æ' not in word and
-                 'ø' not in word]
-    dist['æø'] = [word for word in words
-                  if 'æ' in word and
-                  'ø' in word and
-                  'å' not in word]
-    dist['æå'] = [word for word in words
-                  if 'æ' in word and
-                  'ø' not in word and
-                  'å' in word]
-    dist['åø'] = [word for word in words
-                  if 'æ' not in word and
-                  'ø' in word and
-                  'å' in word]
-    dist['æøå'] = [word for word in words
-                   if 'æ' in word and
-                   'ø' in word and
-                   'å' in word]
-    dist['other'] = [word for word in words
-                     if 'æ' not in word and
-                     'ø' not in word and
-                     'å' not in word]
-    dist['all'] = dist['æ'] + dist['ø'] + dist['å'] + dist['æø'] + dist['æå'] + dist['åø'] + dist['æøå'] + dist['other']
+    for x in range(0, len(letters)):
+        dist[letters[x]] = len([word for word in words
+                                if letters[x] in word
+                                and letters[x-1] not in word
+                                and letters[x-2] not in word])
+    for x in range(0, len(combos)):
+        dictName = ''.join(combos[x][:2])
+        dist[dictName] = len([word for word in words
+                              if combos[x][0] in word
+                              and combos[x][1] in word
+                              and combos[x][2] not in word])
+    dist['æøå'] = len([word for word in words
+                       if 'æ' in word
+                       and 'ø' in word
+                       and 'å' in word])
+
+    dist['other'] = len([word for word in words
+                         if 'æ' not in word
+                         and 'ø' not in word
+                         and 'å' not in word])
+
+    dist['all'] = sum([value for key, value in dist.items()])
+
     with open(f'{csvSave}charDist.csv', 'w') as charDistFile:
         charDistFile.write('letter,count\n')
         for key, value in dist.items():
